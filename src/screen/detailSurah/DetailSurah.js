@@ -62,6 +62,9 @@ const DetailSurah = ({route, item, navigation}) => {
         <Text style={{color: '#79b651', marginTop: 30}}>
           {item.text.transliteration.en}
         </Text>
+        <Text style={{color: 'white', marginTop: 30}}>
+          {item.translation.id}
+        </Text>
       </View>
     );
   };
@@ -91,6 +94,7 @@ const DetailSurah = ({route, item, navigation}) => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderItem}
         style={{marginTop: 10}}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );

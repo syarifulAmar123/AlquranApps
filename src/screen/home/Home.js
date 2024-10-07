@@ -119,6 +119,7 @@ const Home = () => {
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         style={{marginTop: 30}}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
