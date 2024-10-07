@@ -35,13 +35,32 @@ const DetailSurah = ({route, item, navigation}) => {
   const renderItem = ({item}) => {
     return (
       <View style={{flex: 1, margin: 20, padding: 10}}>
+        <View
+          style={{
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: 30,
+            height: 30,
+            borderRadius: 20,
+            borderWidth: 1,
+            borderColor: '#b0764c',
+            // marginTop: 20,
+            marginBottom: 30,
+          }}>
+          <Text style={{color: '#79b651', fontSize: 14}}>
+            {item.number.inSurah}
+          </Text>
+        </View>
         <Text
           style={{
             color: 'white',
-            fontSize: 20,
+            fontSize: 21,
             color: '#b0764c',
           }}>
           {item.text.arab}
+        </Text>
+        <Text style={{color: '#79b651', marginTop: 30}}>
+          {item.text.transliteration.en}
         </Text>
       </View>
     );

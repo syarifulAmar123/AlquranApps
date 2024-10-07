@@ -9,7 +9,6 @@ import {
   FlatList,
   TouchableOpacity,
 } from 'react-native';
-import {back} from '../../assets';
 
 const Home = () => {
   const navigation = useNavigation();
@@ -98,8 +97,20 @@ const Home = () => {
           height: 50,
           flexDirection: 'row',
         }}>
+        <Image
+          source={{
+            uri: 'https://tse2.mm.bing.net/th?id=OIP.jCbMNaDx3k4hcEtrR8LdkgAAAA&pid=Api&P=0&h=180',
+          }}
+          style={{
+            width: 35,
+            height: 35,
+            marginTop: 25,
+            marginLeft: 20,
+            borderRadius: 25,
+          }}
+        />
         <Text
-          style={{color: 'white', marginTop: 25, fontSize: 18, marginLeft: 30}}>
+          style={{color: 'white', marginTop: 30, fontSize: 18, marginLeft: 20}}>
           Al-Qur'an Indonesia
         </Text>
       </View>
