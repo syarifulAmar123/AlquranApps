@@ -14,7 +14,6 @@ import {back} from '../../assets';
 const DetailSurah = ({route, item, navigation}) => {
   const {surahNumber} = route?.params;
   const {apiAsli} = route?.params;
-  console.log('ayaht persurah : ', apiAsli);
   const [listAyat, setListAyat] = useState([]);
 
   const GetApiAyah = () => {

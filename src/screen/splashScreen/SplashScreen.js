@@ -26,10 +26,10 @@ const SplashScreen = () => {
           style={{
             fontWeight: 'bold',
             fontSize: 18,
-            color: 'white',
+            color: '#79b651',
             fontFamily: 'Anton-Regular',
           }}>
-          Decoration By :{' '}
+          Decoration By :
           <Text style={{fontSize: 18, color: '#dcac1f'}}>
             {' '}
             Mohammad Syariful Amar
