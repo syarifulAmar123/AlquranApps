@@ -16,7 +16,7 @@ const Home = () => {
   const apiAsli = 'https://api.quran.gading.dev/surah';
   const MovvingScreen = surahNumber => {
     navigation.navigate('DetailSurah', {
-      surahNumber: `${apiAsli}/${surahNumber}`,
+      SSurahNumber: `${apiAsli}/${surahNumber}`,
       apiAsli,
     });
   };

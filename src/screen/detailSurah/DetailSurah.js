@@ -8,16 +8,19 @@ import {
   Image,
   Touchable,
   TouchableOpacity,
+  Button,
 } from 'react-native';
 import {back} from '../../assets';
+import Sound from 'react-native-sound';
 
 const DetailSurah = ({route, item, navigation}) => {
-  const {surahNumber} = route?.params;
-  const {apiAsli} = route?.params;
+  const {SSurahNumber} = route?.params;
   const [listAyat, setListAyat] = useState([]);
+  const [currentSound, setCurrentSound] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const GetApiAyah = () => {
-    return fetch(surahNumber)
+    return fetch(SSurahNumber)
       .then(response => response.json())
       .then(json => {
         setListAyat(json.data.verses);
@@ -29,11 +32,52 @@ const DetailSurah = ({route, item, navigation}) => {
 
   useEffect(() => {
     GetApiAyah();
+    return () => {
+      if (currentSound) {
+        currentSound.release();
+      }
+    };
   }, []);
 
+  const playAudio = audioUrl => {
+    if (currentSound) {
+      currentSound.stop(() => {
+        currentSound.release();
+      });
+    }
+
+    const sound = new Sound(audioUrl, null, error => {
+      if (error) {
+        console.error('Failed to load sound', error);
+        return;
+      }
+
+      setCurrentSound(sound);
+
+      sound.play(success => {
+        if (success) {
+          setIsPlaying(false);
+        }
+      });
+
+      setIsPlaying(true);
+    });
+  };
+
+  const toggleAudio = audioUrl => {
+    if (isPlaying) {
+      currentSound.pause(() => {
+        setIsPlaying(false);
+      });
+    } else {
+      playAudio(audioUrl);
+    }
+  };
+
   const renderItem = ({item}) => {
+    const audioUrl = item.audio.primary;
     return (
-      <View style={{flex: 1, margin: 20, padding: 10}}>
+      <View style={{flex: 1, margin: 20, padding: 10, paddingVertical: 30}}>
         <View
           style={{
             justifyContent: 'center',
@@ -43,8 +87,7 @@ const DetailSurah = ({route, item, navigation}) => {
             borderRadius: 20,
             borderWidth: 1,
             borderColor: '#b0764c',
-            // marginTop: 20,
-            marginBottom: 30,
+            marginBottom: 35,
           }}>
           <Text style={{color: '#79b651', fontSize: 14}}>
             {item.number.inSurah}
@@ -61,9 +104,25 @@ const DetailSurah = ({route, item, navigation}) => {
         <Text style={{color: '#79b651', marginTop: 30}}>
           {item.text.transliteration.en}
         </Text>
-        <Text style={{color: 'white', marginTop: 30}}>
+        <Text style={{color: 'white', marginTop: 10, marginBottom: 30}}>
           {item.translation.id}
         </Text>
+        <TouchableOpacity
+          style={{
+            width: 100,
+            height: 40,
+            borderRadius: 10,
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: '#22a6b3',
+            marginLeft: 250,
+          }}
+          onPress={() => toggleAudio(audioUrl)}
+          activeOpacity={0.7}>
+          <Text style={{color: 'white', fontSize: 14, fontWeight: '600'}}>
+            {isPlaying ? 'Jeda Ayat' : 'Putar Ayat'}
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   };
@@ -71,7 +130,7 @@ const DetailSurah = ({route, item, navigation}) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle={'light-content'} backgroundColor={'#141f1d'} />
-      <View style={{width: '100%', height: 50, flexDirection: 'row'}}>
+      <View style={{width: '100%', height: 80, flexDirection: 'row'}}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={back}
@@ -79,12 +138,12 @@ const DetailSurah = ({route, item, navigation}) => {
               width: 30,
               height: 30,
               marginLeft: 10,
-              marginTop: 20,
+              marginTop: 40,
             }}
           />
         </TouchableOpacity>
         <Text
-          style={{color: 'white', marginTop: 25, fontSize: 18, marginLeft: 10}}>
+          style={{color: 'white', marginTop: 40, fontSize: 18, marginLeft: 10}}>
           Al-Qur'an Indonesia
         </Text>
       </View>
@@ -116,3 +175,104 @@ const styles = StyleSheet.create({
 });
 
 export default DetailSurah;
+
+// import React, {useEffect, useState} from 'react';
+// import {
+//   View,
+//   Text,
+//   StyleSheet,
+//   StatusBar,
+//   FlatList,
+//   Image,
+//   TouchableOpacity,
+// } from 'react-native';
+// import {back} from '../../assets';
+// import Sound from 'react-native-sound';
+
+// const DetailSurah = ({route, navigation}) => {
+//   const {SSurahNumber} = route?.params;
+//   const [listAyat, setListAyat] = useState([]);
+
+//   const GetApiAyah = () => {
+//     return fetch(SSurahNumber)
+//       .then(response => response.json())
+//       .then(json => {
+//         setListAyat(json.data.verses);
+//       })
+//       .catch(error => {
+//         console.error(error);
+//       });
+//   };
+
+//   useEffect(() => {
+//     GetApiAyah();
+
+//   }, []);
+
+//   const renderItem = ({item}) => {
+//     const audioUrl = item.audio.primary; // Pastikan audio URL ada di dalam item
+//     return (
+//       <View style={{flex: 1, margin: 20, padding: 10, paddingVertical: 30}}>
+//         <View style={styles.ayatNumber}>
+//           <Text style={{color: '#79b651', fontSize: 14}}>
+//             {item.number.inSurah}
+//           </Text>
+//         </View>
+//         <Text style={styles.arabText}>{item.text.arab}</Text>
+//         <Text style={styles.transliterationText}>
+//           {item.text.transliteration.en}
+//         </Text>
+//         <Text style={styles.translationText}>{item.translation.id}</Text>
+
+//       </View>
+//     );
+//   };
+
+//   return (
+//     <View style={styles.container}>
+//       <StatusBar barStyle={'light-content'} backgroundColor={'#141f1d'} />
+//       <View style={{width: '100%', height: 80, flexDirection: 'row'}}>
+//         <TouchableOpacity onPress={() => navigation.goBack()}>
+//           <Image
+//             source={back}
+//             style={{
+//               width: 30,
+//               height: 30,
+//               marginLeft: 10,
+//               marginTop: 40,
+//             }}
+//           />
+//         </TouchableOpacity>
+//         <Text
+//           style={{color: 'white', marginTop: 40, fontSize: 18, marginLeft: 10}}>
+//           Al-Qur'an Indonesia
+//         </Text>
+//       </View>
+//       <FlatList
+//         data={listAyat}
+//         keyExtractor={(item, index) => index.toString()}
+//         renderItem={renderItem}
+//         style={{marginTop: 10}}
+//         showsVerticalScrollIndicator={false}
+//       />
+//     </View>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//     backgroundColor: '#141f1d',
+//   },
+//   content: {
+//     fontFamily: 'Anton-Regular.ttf',
+//     fontSize: 70,
+//     color: '#cc9068',
+//     marginRight: 20,
+//     marginTop: -100,
+//   },
+// });
+
+// export default DetailSurah;
