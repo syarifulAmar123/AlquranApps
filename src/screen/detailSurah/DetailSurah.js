@@ -131,7 +131,7 @@ const DetailSurah = ({route, item, navigation}) => {
     <View style={styles.container}>
       <StatusBar barStyle={'light-content'} backgroundColor={'#141f1d'} />
       <View style={{width: '100%', height: 80, flexDirection: 'row'}}>
-        <TouchableOpacity onPress={() => navigation.goback()}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image
             source={back}
             style={{
